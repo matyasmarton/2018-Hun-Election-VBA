@@ -1,0 +1,54 @@
+' Code for the Pivot Table
+
+Private Sub CommandButton3_Click()
+
+' Pivot Makró
+' Pivot
+
+'Declare Variables
+
+  Dim PSheet As Worksheet
+     Dim DSheet As Worksheet
+     Dim LastRow As Long
+     Dim LastCol As Long
+     Dim PRange As Range
+     Dim PCache As PivotCache
+     Dim PTable As PivotTable
+' Add the new sheet
+     Sheets.Add
+     ActiveSheet.Name = "Pivottable"
+
+' Declare source variable at DSheet and destinationvariable at PSheet
+
+    Set PSheet = Worksheets("Pivottable")
+    Set DSheet = Worksheets("Separated")
+
+' Count rows and cols for the slection 
+
+    LastRow = DSheet.Cells(Rows.Count, 1).End(xlUp).Row
+    LastCol = DSheet.Cells(1, Columns.Count).End(xlToLeft).Column
+    Set PRange = DSheet.Range("A1").CurrentRegion
+
+' Create the Pivot Table
+
+    Set PCache = ActiveWorkbook.PivotCaches.Create(SourceType:=xlDatabase, SourceData:="'" & DSheet.Name & "'!" & PRange.Address(ReferenceStyle:=xlR1C1))
+
+    Set PTable = PCache.CreatePivotTable(TableDestination:=PSheet.Cells(1, 1), TABLENAME:="PRIMEPivotTable")
+
+' Create the Segments of the Pivot Table
+
+    With PTable.PivotFields("Division")
+        .Orientation = xlRowField
+        .Position = 1
+    End With
+
+    With PTable.PivotFields("Party_Name")
+        .Orientation = xlRowField
+        .Position = 2
+    End With
+
+' Format the Pivot Table 
+
+    PTable.AddDataField PSheet.PivotTables _
+        ("PRIMEPivotTable").PivotFields("Votes"), "Sum of Votes", xlSum
+End Sub
