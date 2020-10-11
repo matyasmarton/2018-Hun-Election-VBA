@@ -1,0 +1,9 @@
+Private Sub CommandButton1_Click()
+
+Sheets("Original").Columns(1).Copy Destination:=Sheets("Separated").Columns(1)
+
+Sheets("Separated").Columns(1).TextToColumns DataType:=xlDelimited, _
+ ConsecutiveDelimiter:=True, Comma:=True
+
+
+End Sub
