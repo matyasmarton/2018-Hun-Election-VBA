@@ -1,0 +1,35 @@
+Private Sub CommandButton1_Click()
+
+
+'Best used when first column has value on last row and first row has a value in the last column
+
+Dim sht As Worksheet
+Dim LastRow As Long
+Dim LastColumn As Long
+Dim StartCell As Range
+Dim objTable As ListObject
+
+Set sht = Worksheets("Separated")
+Set StartCell = Range("A1")
+
+'Find Last Row and Column
+  LastRow = sht.Cells(sht.Rows.Count, StartCell.Column).End(xlUp).Row
+  LastColumn = sht.Cells(StartCell.Row, sht.Columns.Count).End(xlToLeft).Column
+
+'Select Range
+  sht.Range(StartCell, sht.Cells(LastRow, LastColumn)).Select
+
+'Create the Table
+Set objTable = ActiveSheet.ListObjects.Add(xlSrcRange, Selection, , xlYes)
+ 
+'Set Criteria for filtering 
+Col = InputBox("Enter the number of column You want to filter")
+Area = InputBox("Enter your keyword between two * characters eg: *Momentum* ")
+
+' Autofilter based on Criteria
+Worksheets("Separated").Range("A1:F1").AutoFilter Field:=Col, Criteria1:=Area
+
+
+
+
+End Sub
